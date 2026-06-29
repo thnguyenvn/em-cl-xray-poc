@@ -203,3 +203,39 @@ class DatasetValidator:
             stats.to_csv(output_file, index=False)
 
         return stats
+        
+    def class_distribution(self, save_csv: bool = True) -> pd.DataFrame:
+        """
+        Compute class distribution from target labels.
+
+        Returns:
+            pandas.DataFrame
+                One row per label with positive count and positive rate.
+        """
+
+        label_stats = self.validate_labels(save_csv=False)
+
+        distribution = label_stats[
+            [
+                "dataset_name",
+                "label",
+                "positive",
+                "positive_rate",
+                "uncertain",
+                "missing",
+            ]
+        ].copy()
+
+        distribution = distribution.sort_values(
+            by="positive",
+            ascending=False,
+        ).reset_index(drop=True)
+
+        if save_csv:
+            output_file = os.path.join(
+                self.output_dir,
+                f"{self.dataset_name}_class_distribution.csv",
+            )
+            distribution.to_csv(output_file, index=False)
+
+        return distribution
