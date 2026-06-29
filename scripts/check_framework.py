@@ -23,6 +23,12 @@ from src.utils import set_seed, get_logger
 from src.experiments import run_baseline
 from src.evaluator import XRayEvaluator
 
+from src.evaluator import (
+    XRayEvaluator,
+    compute_per_class_metrics,
+    compute_global_metrics,
+)
+
 print("=" * 60)
 print("Framework OK")
 print("=" * 60)
