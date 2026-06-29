@@ -56,15 +56,40 @@ class CheXpertDataset(Dataset):
 
         return df.reset_index(drop=True)
 
+
+    def _resolve_image_path(self, img_path: str) -> str:
+        """
+        Resolve image path for different CheXpert folder layouts.
+        """
+
+        img_path = str(img_path).replace("\\", "/")
+
+        if os.path.isabs(img_path) and os.path.exists(img_path):
+            return img_path
+
+        candidates = [
+            os.path.join(self.root_dir, img_path),
+            os.path.join(
+                self.root_dir,
+                img_path.replace("CheXpert-v1.0-small/", ""),
+            ),
+        ]
+
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                return candidate
+
+        raise FileNotFoundError(
+            f"Image not found. Tried: {candidates}"
+        )
+
     def __len__(self):
         return len(self.df)
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
 
-        img_path = row["Path"]
-        if not os.path.isabs(img_path):
-            img_path = os.path.join(self.root_dir, img_path)
+        img_path = self._resolve_image_path(row["Path"])
 
         image = Image.open(img_path).convert("RGB")
 
