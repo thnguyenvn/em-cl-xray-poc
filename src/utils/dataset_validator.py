@@ -239,3 +239,49 @@ class DatasetValidator:
             distribution.to_csv(output_file, index=False)
 
         return distribution
+        
+    def run_all(
+        self,
+        max_path_check: int = 1000,
+        save_csv: bool = True,
+    ) -> Dict:
+        """
+        Run all dataset validation steps.
+
+        Args:
+            max_path_check:
+                Maximum number of image paths to check.
+                Use None to check the entire dataset.
+            save_csv:
+                Whether to save reports to CSV.
+
+        Returns:
+            Dictionary containing all validation outputs.
+        """
+
+        print(f"Running dataset validation for: {self.dataset_name}")
+
+        path_summary = self.validate_paths(
+            max_check=max_path_check,
+            save_csv=save_csv,
+        )
+
+        label_statistics = self.validate_labels(
+            save_csv=save_csv,
+        )
+
+        class_distribution = self.class_distribution(
+            save_csv=save_csv,
+        )
+
+        report = {
+            "dataset_name": self.dataset_name,
+            "path_summary": path_summary,
+            "label_statistics": label_statistics,
+            "class_distribution": class_distribution,
+        }
+
+        print("Validation completed.")
+        print(path_summary)
+
+        return report
