@@ -1,0 +1,7 @@
+dataset:
+  name: chexpert-v1.0-small
+  root: /kaggle/input/chexpert-v10-small
+  train_csv: train.csv
+  valid_csv: valid.csv
+  image_size: 224
+  uncertainty_policy: em_pseudolabel

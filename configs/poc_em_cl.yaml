@@ -1,0 +1,47 @@
+project:
+  name: em-cl-xray-poc
+  seed: 42
+  output_dir: /kaggle/working/outputs
+
+datasets:
+  chexpert_root: /kaggle/input/chexpert-v10-small
+  nih_root: /kaggle/input/nih-chest-xrays
+  image_size: 224
+  selected_labels:
+    - No Finding
+    - Atelectasis
+    - Cardiomegaly
+    - Edema
+    - Pleural Effusion
+
+continual_learning:
+  scenario: task_incremental
+  num_tasks: 5
+  memory_size: 1000
+  batch_size: 32
+  epochs_per_task: 3
+  num_workers: 2
+
+model:
+  backbone: densenet121
+  pretrained: true
+  feature_dim: 1024
+  num_classes: 5
+
+em:
+  enabled: true
+  components: 5
+  covariance_type: diag
+  max_iter: 100
+  use_bic_selection: true
+  pseudo_label_threshold: 0.7
+
+optimizer:
+  name: adam
+  lr: 0.0001
+  weight_decay: 0.00001
+
+metrics:
+  save_accuracy_matrix: true
+  save_auc: true
+  save_forgetting: true

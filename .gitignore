@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.env
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and outputs
+/data/
+/datasets/
+outputs/checkpoints/*.pt
+outputs/checkpoints/*.pth
+outputs/checkpoints/*.ckpt
+*.zip
+*.tar
+*.tar.gz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kaggle
+kaggle.json

@@ -1,0 +1,5 @@
+dataset:
+  name: nih-chest-xray14
+  root: /kaggle/input/nih-chest-xrays
+  csv: Data_Entry_2017.csv
+  image_size: 224
