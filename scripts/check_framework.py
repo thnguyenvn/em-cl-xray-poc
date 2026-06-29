@@ -21,6 +21,7 @@ from src.metrics import compute_multilabel_metrics
 from src.trainer import MultilabelTrainer
 from src.utils import set_seed, get_logger
 from src.experiments import run_baseline
+from src.evaluator import XRayEvaluator
 
 print("=" * 60)
 print("Framework OK")
