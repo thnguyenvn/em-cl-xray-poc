@@ -6,7 +6,7 @@ This module is intentionally lightweight and reusable for:
 - NIHChestXrayDataset
 - future X-ray datasets
 """
-
+import numpy as np
 import os
 from typing import Dict, List, Optional
 
@@ -141,3 +141,65 @@ class DatasetValidator:
             summary["missing_file_report"] = output_path
 
         return summary
+        
+    def validate_labels(self, save_csv: bool = True) -> pd.DataFrame:
+        """
+        Validate label statistics.
+
+        This function works for both:
+        - CheXpert labels: 1, 0, -1, NaN
+        - NIH labels after preprocessing: 1, 0
+
+        Args:
+            save_csv:
+                Whether to save label statistics to CSV.
+
+        Returns:
+            pandas.DataFrame
+                Label-level statistics.
+        """
+
+        df = self.dataset.df
+        rows = []
+
+        for label in self.dataset.target_labels:
+            if label not in df.columns:
+                raise ValueError(f"Label '{label}' not found in dataset dataframe.")
+
+            values = df[label]
+
+            num_samples = len(values)
+            positive = int((values == 1).sum())
+            negative = int((values == 0).sum())
+            uncertain = int((values == -1).sum())
+            missing = int(values.isna().sum())
+
+            positive_rate = positive / num_samples if num_samples > 0 else 0.0
+            uncertain_rate = uncertain / num_samples if num_samples > 0 else 0.0
+            missing_rate = missing / num_samples if num_samples > 0 else 0.0
+
+            rows.append(
+                {
+                    "dataset_name": self.dataset_name,
+                    "label": label,
+                    "num_samples": num_samples,
+                    "positive": positive,
+                    "negative": negative,
+                    "uncertain": uncertain,
+                    "missing": missing,
+                    "positive_rate": positive_rate,
+                    "uncertain_rate": uncertain_rate,
+                    "missing_rate": missing_rate,
+                }
+            )
+
+        stats = pd.DataFrame(rows)
+
+        if save_csv:
+            output_file = os.path.join(
+                self.output_dir,
+                f"{self.dataset_name}_label_statistics.csv",
+            )
+            stats.to_csv(output_file, index=False)
+
+        return stats
