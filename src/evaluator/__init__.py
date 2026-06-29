@@ -12,6 +12,8 @@ from .visualization import (
     plot_training_history,
 )
 
+from .report import generate_baseline_report
+
 __all__ = [
     "XRayEvaluator",
 
@@ -22,4 +24,5 @@ __all__ = [
     "plot_pr_curves",
     "plot_per_class_auc",
     "plot_training_history",
+    "generate_baseline_report",
 ]
