@@ -22,7 +22,7 @@ from src.trainer import MultilabelTrainer
 from src.utils import set_seed, get_logger
 from src.experiments import run_baseline
 from src.evaluator import XRayEvaluator
-from src.continual import ReplayMemory
+from src.continual import ReplayMemory, ReplayTrainer
 
 from src.evaluator import (
     XRayEvaluator,
