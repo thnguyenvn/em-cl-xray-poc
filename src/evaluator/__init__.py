@@ -25,4 +25,10 @@ __all__ = [
     "plot_per_class_auc",
     "plot_training_history",
     "generate_baseline_report",
+    "build_accuracy_matrix",
+    "summarize_continual_metrics",
+    "plot_accuracy_matrix",
+    "compute_average_accuracy",
+    "compute_average_forgetting",
+    "compute_backward_transfer",
 ]
